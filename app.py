@@ -6,7 +6,7 @@ from PIL import Image
 st.title("Garbage Detection and Classification")
 
 model = tf.keras.models.load_model(
-    "garbage_model.keras",
+    "garbage_model_final.keras",
     custom_objects={
         "preprocess_input": tf.keras.applications.mobilenet_v2.preprocess_input
     }
