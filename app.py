@@ -79,25 +79,41 @@ classes = [
     "trash"
 ]
 
-# ---------------- UPLOAD ----------------
-st.subheader("📷 Upload Garbage Image")
+# ---------------- INPUT OPTIONS ----------------
+st.subheader("📷 Choose Image Input")
 
-uploaded_file = st.file_uploader(
-    "Choose an image",
-    type=["jpg", "jpeg", "png"]
+input_method = st.radio(
+    "Select a method:",
+    ["📁 Upload Image", "📷 Take Photo"],
+    horizontal=True
 )
 
+uploaded_file = None
+
+if input_method == "📁 Upload Image":
+
+    uploaded_file = st.file_uploader(
+        "Choose a garbage image",
+        type=["jpg", "jpeg", "png"]
+    )
+
+else:
+
+    uploaded_file = st.camera_input(
+        "Take a photo of the garbage"
+    )
+
+# ---------------- PREDICTION ----------------
 if uploaded_file:
 
     image = Image.open(uploaded_file).convert("RGB")
 
     st.image(
         image,
-        caption="Uploaded Image",
+        caption="Input Image",
         use_container_width=True
     )
 
-    # ---------------- PREDICTION ----------------
     resized_image = image.resize((224, 224))
 
     img = np.array(resized_image)
@@ -128,16 +144,21 @@ if uploaded_file:
         unsafe_allow_html=True
     )
 
-    # ---------------- WARNING ----------------
+    # ---------------- CONFIDENCE MESSAGE ----------------
     if confidence < 70:
+
         st.warning(
             "⚠️ The model is uncertain about this prediction. "
             "Try another image with better lighting and a clear view."
         )
-    else:
-        st.success("✅ The model is confident about this prediction.")
 
-    # ---------------- TOP 3 PREDICTIONS ----------------
+    else:
+
+        st.success(
+            "✅ The model is confident about this prediction."
+        )
+
+    # ---------------- TOP 3 ----------------
     st.divider()
 
     st.subheader("📊 Top 3 Predictions")
@@ -159,6 +180,7 @@ if uploaded_file:
 st.divider()
 
 with st.expander("ℹ️ About this project"):
+
     st.write(
         """
         This application uses a deep learning image classification model
