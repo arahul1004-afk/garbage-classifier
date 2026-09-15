@@ -35,3 +35,8 @@ if uploaded_file:
 
     st.success(f"Prediction: {predicted_class}")
     st.info(f"Confidence: {confidence:.2f}%")
+
+    st.subheader("Class Probabilities")
+
+    for i in range(len(classes)):
+        st.write(f"{classes[i].capitalize()}: {prediction[0][i] * 100:.2f}%")
