@@ -137,16 +137,19 @@ if uploaded_file:
     else:
         st.success("✅ The model is confident about this prediction.")
 
-    # ---------------- PROBABILITIES ----------------
+    # ---------------- TOP 3 PREDICTIONS ----------------
     st.divider()
 
-    st.subheader("📊 Class Probabilities")
+    st.subheader("📊 Top 3 Predictions")
 
-    for i in np.argsort(prediction[0])[::-1]:
+    top_3 = np.argsort(prediction[0])[::-1][:3]
+
+    for rank, i in enumerate(top_3, start=1):
+
         probability = prediction[0][i] * 100
 
         st.write(
-            f"**{classes[i].capitalize()}** — "
+            f"**{rank}. {classes[i].capitalize()}** — "
             f"{probability:.2f}%"
         )
 
@@ -161,15 +164,17 @@ with st.expander("ℹ️ About this project"):
         This application uses a deep learning image classification model
         to classify garbage into six categories:
 
-        • Cardboard  
-        • Glass  
-        • Metal  
-        • Paper  
-        • Plastic  
-        • Trash  
+        • Cardboard
+        • Glass
+        • Metal
+        • Paper
+        • Plastic
+        • Trash
 
         The model was trained using transfer learning with EfficientNetB0.
         """
     )
 
-st.caption("Garbage Detection and Classification | Final Year Project")
+st.caption(
+    "Garbage Detection and Classification | Final Year Project"
+)
